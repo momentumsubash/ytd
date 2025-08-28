@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "youtube-dl-exec": "^3.0.24",
+    "youtubei": "^1.7.0",
+    "yt-dlp-wrap": "^2.3.12",
+    "ytdl-core": "^4.11.5"
+  }
+}
