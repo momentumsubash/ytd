@@ -4620,8 +4620,47 @@
       "totalVideos": 5,
       "startedAt": "2025-09-03T06:28:20.208Z",
       "completedAt": "2025-09-03T06:36:05.315Z"
+    },
+    "https://www.youtube.com/watch?list=PLKD9IRjNEpXsnyY2_prYqyEqfvXUYj-T3": {
+      "completed": false,
+      "lastVideoIndex": 4,
+      "downloadedVideos": [
+        {
+          "index": 1,
+          "url": "https://www.youtube.com/watch?v=sNpFdbTQcPs",
+          "filename": "001_Imran Masood Interview_  __     __  _ _ ZEE News",
+          "timestamp": "2025-09-03T06:39:54.574Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 2,
+          "url": "https://www.youtube.com/watch?v=2pmVvsIz6zc",
+          "filename": "002_Khechari_ Imran Masood         _ _ Akhilesh Yadav",
+          "timestamp": "2025-09-03T06:40:31.020Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 3,
+          "url": "https://www.youtube.com/watch?v=Ro9EbVauheE",
+          "filename": "003_Dimple Yadav     .. Congress     Imran Masood",
+          "timestamp": "2025-09-03T06:41:26.602Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 4,
+          "url": "https://www.youtube.com/watch?v=pmWR70rrOg4",
+          "filename": "004_Khechari_     Bulldozer Action    _ _ Imran Masood Interview",
+          "timestamp": "2025-09-03T06:42:16.794Z",
+          "status": "downloaded"
+        }
+      ],
+      "skippedVideos": [],
+      "failedVideos": [],
+      "totalVideos": 5,
+      "startedAt": "2025-09-03T06:36:05.316Z",
+      "completedAt": null
     }
   },
-  "lastUpdated": "2025-09-03T06:36:05.315Z",
-  "totalDownloaded": 635
+  "lastUpdated": "2025-09-03T06:42:16.794Z",
+  "totalDownloaded": 639
 }
