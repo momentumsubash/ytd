@@ -12,6 +12,155 @@ class YouTubeDownloader {
   constructor() {
     this.ytDlpWrap = new YTDlpWrap();
     this.initialized = false;
+    this.progressFile = path.join(__dirname, 'download_progress.json');
+    this.configFile = path.join(__dirname, 'playlists.json');
+    this.progress = this.loadProgress();
+  }
+
+  loadProgress() {
+    try {
+      if (fs.existsSync(this.progressFile)) {
+        const data = JSON.parse(fs.readFileSync(this.progressFile, 'utf8'));
+        console.log('📊 Loaded previous progress');
+        return data;
+      }
+    } catch (error) {
+      console.log('⚠️  Could not load progress file, starting fresh');
+    }
+    
+    return {
+      playlists: {},
+      lastUpdated: new Date().toISOString(),
+      totalDownloaded: 0
+    };
+  }
+
+  saveProgress() {
+    try {
+      this.progress.lastUpdated = new Date().toISOString();
+      fs.writeFileSync(this.progressFile, JSON.stringify(this.progress, null, 2));
+      console.log('💾 Progress saved');
+    } catch (error) {
+      console.error('❌ Failed to save progress:', error.message);
+    }
+  }
+
+  loadPlaylists() {
+    try {
+      if (!fs.existsSync(this.configFile)) {
+        // Create default config file with simple array format
+        const defaultConfig = [
+          "https://www.youtube.com/watch?v=hBez2q0jJao&list=PLKD9IRjNEpXuD9oTeF8kG3zOls0D_wd28&ab_channel=ZeeNews"
+        ];
+        
+        fs.writeFileSync(this.configFile, JSON.stringify(defaultConfig, null, 2));
+        console.log(`📝 Created default config file: ${this.configFile}`);
+        console.log('🔧 Please edit this file to add your playlist URLs');
+      }
+      
+      const playlistUrls = JSON.parse(fs.readFileSync(this.configFile, 'utf8'));
+      
+      // Convert simple array to config object format for internal processing
+      const config = {
+        playlists: playlistUrls.map((url, index) => ({
+          name: `Playlist ${index + 1}`,
+          url: url,
+          maxVideos: null, // Download all videos
+          startIndex: 0,
+          enabled: true
+        })),
+        settings: {
+          delayBetweenDownloads: 5000,
+          delayBetweenPlaylists: 30000,
+          skipLowQuality: true,
+          minQualityHeight: 720
+        }
+      };
+      
+      console.log(`📋 Loaded ${config.playlists.length} playlists from config`);
+      return config;
+    } catch (error) {
+      console.error('❌ Failed to load playlists config:', error.message);
+      return null;
+    }
+  }
+
+  getPlaylistProgress(playlistUrl) {
+    if (!this.progress.playlists[playlistUrl]) {
+      this.progress.playlists[playlistUrl] = {
+        completed: false,
+        lastVideoIndex: 0,
+        downloadedVideos: [],
+        skippedVideos: [],
+        failedVideos: [],
+        totalVideos: 0,
+        startedAt: new Date().toISOString(),
+        completedAt: null
+      };
+    }
+    return this.progress.playlists[playlistUrl];
+  }
+
+  markVideoDownloaded(playlistUrl, videoIndex, videoUrl, filename, status = 'downloaded') {
+    const playlistProgress = this.getPlaylistProgress(playlistUrl);
+    
+    const videoInfo = {
+      index: videoIndex,
+      url: videoUrl,
+      filename: filename,
+      timestamp: new Date().toISOString(),
+      status: status
+    };
+
+    if (status === 'downloaded') {
+      playlistProgress.downloadedVideos.push(videoInfo);
+      playlistProgress.lastVideoIndex = Math.max(playlistProgress.lastVideoIndex, videoIndex);
+      this.progress.totalDownloaded++;
+    } else if (status === 'skipped') {
+      playlistProgress.skippedVideos.push(videoInfo);
+    } else if (status === 'failed') {
+      playlistProgress.failedVideos.push(videoInfo);
+    }
+
+    this.saveProgress();
+  }
+
+  markPlaylistCompleted(playlistUrl) {
+    const playlistProgress = this.getPlaylistProgress(playlistUrl);
+    playlistProgress.completed = true;
+    playlistProgress.completedAt = new Date().toISOString();
+    this.saveProgress();
+    console.log(`✅ Playlist marked as completed`);
+  }
+
+  isVideoAlreadyDownloaded(playlistUrl, videoIndex) {
+    const playlistProgress = this.getPlaylistProgress(playlistUrl);
+    return playlistProgress.downloadedVideos.some(video => video.index === videoIndex);
+  }
+
+  printProgressSummary() {
+    console.log('\n' + '='.repeat(60));
+    console.log('📊 DOWNLOAD PROGRESS SUMMARY');
+    console.log('='.repeat(60));
+    console.log(`📅 Last Updated: ${new Date(this.progress.lastUpdated).toLocaleString()}`);
+    console.log(`🎯 Total Videos Downloaded: ${this.progress.totalDownloaded}`);
+    console.log('');
+
+    for (const [playlistUrl, progress] of Object.entries(this.progress.playlists)) {
+      const status = progress.completed ? '✅ COMPLETED' : '🔄 IN PROGRESS';
+      console.log(`${status} - ${progress.downloadedVideos.length + progress.skippedVideos.length}/${progress.totalVideos} videos processed`);
+      console.log(`   🔗 ${playlistUrl.substring(0, 80)}...`);
+      console.log(`   ⬇️  Downloaded: ${progress.downloadedVideos.length}`);
+      console.log(`   ⏭️  Skipped: ${progress.skippedVideos.length}`);
+      console.log(`   ❌ Failed: ${progress.failedVideos.length}`);
+      if (progress.completed) {
+        console.log(`   ✅ Completed: ${new Date(progress.completedAt).toLocaleString()}`);
+      } else {
+        console.log(`   🔄 Next video index: ${progress.lastVideoIndex + 1}`);
+      }
+      console.log('');
+    }
+    console.log('='.repeat(60) + '\n');
   }
 
   async initialize() {
@@ -74,14 +223,12 @@ class YouTubeDownloader {
       const audioFormats = [];
       
       lines.forEach(line => {
-        // Match format lines that contain format ID and resolution
         const formatMatch = line.match(/^(\d+)\s+(\w+)\s+(\d+x\d+|\w+)/);
         if (formatMatch) {
           const formatId = formatMatch[1];
           const container = formatMatch[2];
           const resolution = formatMatch[3];
           
-          // Check if it's a video format with resolution
           const resolutionMatch = resolution.match(/(\d+)x(\d+)/);
           if (resolutionMatch) {
             const width = parseInt(resolutionMatch[1]);
@@ -99,9 +246,7 @@ class YouTubeDownloader {
             }
           }
           
-          // Check if it's an audio format (no resolution, but has audio indicators)
           if (!resolutionMatch && (line.includes('audio only') || line.includes('mp4a') || line.includes('opus') || line.includes('m4a') || container === 'm4a' || container === 'webm')) {
-            // Extract bitrate if available
             const bitrateMatch = line.match(/(\d+)k/);
             const bitrate = bitrateMatch ? parseInt(bitrateMatch[1]) : 0;
             
@@ -115,21 +260,8 @@ class YouTubeDownloader {
         }
       });
 
-      // Sort video formats by quality (height) descending
       videoFormats.sort((a, b) => b.height - a.height);
-      
-      // Sort audio formats by bitrate descending
       audioFormats.sort((a, b) => b.bitrate - a.bitrate);
-
-      console.log(`✅ Found ${videoFormats.length} HD video formats (>720p):`);
-      videoFormats.forEach(format => {
-        console.log(`   🎬 ID: ${format.id} - ${format.quality} (${format.container})`);
-      });
-      
-      console.log(`✅ Found ${audioFormats.length} audio formats:`);
-      audioFormats.forEach(format => {
-        console.log(`   🔊 ID: ${format.id} - ${format.bitrate}k (${format.container})`);
-      });
 
       return { videoFormats, audioFormats };
     } catch (error) {
@@ -145,7 +277,6 @@ class YouTubeDownloader {
 
       console.log(`⬇️  Downloading: ${filename}`);
 
-      // Get available formats
       const { videoFormats, audioFormats } = await this.getAvailableFormats(videoUrl);
       
       if (videoFormats.length === 0) {
@@ -163,7 +294,6 @@ class YouTubeDownloader {
       let videoExt = 'mp4';
       let audioExt = 'm4a';
 
-      // Download HD video
       console.log('🎬 Downloading HD video...');
       for (const videoFormat of videoFormats) {
         try {
@@ -187,7 +317,6 @@ class YouTubeDownloader {
         }
       }
 
-      // Download audio
       if (videoDownloaded) {
         console.log('🔊 Downloading audio...');
         for (const audioFormat of audioFormats) {
@@ -215,12 +344,7 @@ class YouTubeDownloader {
 
       if (videoDownloaded && audioDownloaded) {
         console.log(`✅ Successfully downloaded both video and audio for: ${filename}`);
-        console.log(`   📁 Video: ${filename}_video.${videoExt}`);
-        console.log(`   📁 Audio: ${filename}_audio.${audioExt}`);
-        
-        // Add to merge queue
         this.addToMergeQueue(filename, videoExt, audioExt);
-        
         return true;
       } else if (videoDownloaded) {
         console.log(`⚠️  Downloaded video only for: ${filename} (no audio available)`);
@@ -256,8 +380,8 @@ class YouTubeDownloader {
       return;
     }
 
-    const scriptPath = path.join(__dirname, 'merge_videos.bat');  // Windows batch file
-    const scriptPathSh = path.join(__dirname, 'merge_videos.sh'); // Linux/Mac shell script
+    const scriptPath = path.join(__dirname, 'merge_videos.bat');
+    const scriptPathSh = path.join(__dirname, 'merge_videos.sh');
     
     let batchContent = '@echo off\n';
     batchContent += 'echo Starting video and audio merge process...\n';
@@ -301,25 +425,16 @@ class YouTubeDownloader {
       fs.writeFileSync(scriptPath, batchContent);
       fs.writeFileSync(scriptPathSh, shellContent);
       
-      // Make shell script executable on Unix systems
       try {
         require('child_process').exec(`chmod +x "${scriptPathSh}"`);
       } catch (e) {
-        // Ignore if chmod fails (probably on Windows)
+        // Ignore chmod errors on Windows
       }
       
       console.log(`\n📝 FFmpeg merge scripts generated:`);
       console.log(`   Windows: ${scriptPath}`);
       console.log(`   Linux/Mac: ${scriptPathSh}`);
-      console.log(`\n🔧 To merge all videos, run:`);
-      console.log(`   Windows: Double-click merge_videos.bat or run it from command prompt`);
-      console.log(`   Linux/Mac: ./merge_videos.sh`);
-      console.log(`\n⚠️  Make sure FFmpeg is installed and in your PATH`);
       console.log(`\n📋 Files ready for merging: ${this.mergeQueue.length}`);
-      
-      this.mergeQueue.forEach((item, index) => {
-        console.log(`   ${index + 1}. ${item.filename}`);
-      });
       
     } catch (error) {
       console.error('❌ Failed to write merge script:', error.message);
@@ -348,59 +463,92 @@ class YouTubeDownloader {
     }
   }
 
-  async downloadPlaylist(playlistUrl, options = {}) {
-    const {
-      maxVideos = null,
-      startIndex = 0,
-      delayBetweenDownloads = 3000,
-      skipLowQuality = true  // New option to skip videos without HD
-    } = options;
+  async downloadPlaylist(playlistConfig, settings) {
+    const { name, url, maxVideos = null, startIndex = 0, enabled = true } = playlistConfig;
+    
+    if (!enabled) {
+      console.log(`⏭️  Skipping disabled playlist: ${name}`);
+      return { successful: 0, failed: 0, skipped: 0 };
+    }
+
+    const playlistProgress = this.getPlaylistProgress(url);
+    
+    if (playlistProgress.completed) {
+      console.log(`✅ Playlist already completed: ${name}`);
+      return { successful: playlistProgress.downloadedVideos.length, failed: 0, skipped: 0 };
+    }
+
+    console.log(`\n🎵 Processing: ${name}`);
+    console.log(`🔗 ${url}`);
+    
+    if (playlistProgress.lastVideoIndex > 0) {
+      console.log(`🔄 Resuming from video index: ${playlistProgress.lastVideoIndex + 1}`);
+      console.log(`📊 Already downloaded: ${playlistProgress.downloadedVideos.length} videos`);
+    }
 
     try {
-      const videoUrls = await this.getPlaylistUrls(playlistUrl);
+      const videoUrls = await this.getPlaylistUrls(url);
       
       if (videoUrls.length === 0) {
         console.log('❌ No videos found in playlist');
         return { successful: 0, failed: 0, skipped: 0 };
       }
 
-      // Apply filters
-      const filteredUrls = videoUrls.slice(startIndex, maxVideos ? startIndex + maxVideos : undefined);
+      playlistProgress.totalVideos = videoUrls.length;
+
+      // Resume from where we left off
+      const resumeIndex = Math.max(startIndex, playlistProgress.lastVideoIndex);
+      const filteredUrls = videoUrls.slice(resumeIndex, maxVideos ? resumeIndex + maxVideos : undefined);
       
-      console.log(`🎯 Will process ${filteredUrls.length} videos (HD only: ${skipLowQuality})\n`);
+      console.log(`🎯 Will process ${filteredUrls.length} videos starting from index ${resumeIndex + 1}\n`);
 
       let successful = 0;
       let failed = 0;
       let skipped = 0;
 
       for (let i = 0; i < filteredUrls.length; i++) {
-        const videoIndex = startIndex + i + 1;
+        const videoIndex = resumeIndex + i + 1;
         const paddedIndex = String(videoIndex).padStart(3, '0');
         
+        // Skip if already downloaded
+        if (this.isVideoAlreadyDownloaded(url, videoIndex)) {
+          console.log(`⏭️  Video ${videoIndex} already downloaded, skipping...`);
+          continue;
+        }
+        
         try {
+          console.log(`\n📹 Processing video ${videoIndex}/${videoUrls.length}`);
           const videoInfo = await this.getVideoInfo(filteredUrls[i]);
           const filename = `${paddedIndex}_${videoInfo.title}`;
           
-          const success = await this.downloadSingleVideo(filteredUrls[i], filename);
-          if (success) {
+          const downloadSuccess = await this.downloadSingleVideo(filteredUrls[i], filename);
+          
+          if (downloadSuccess) {
+            this.markVideoDownloaded(url, videoIndex, filteredUrls[i], filename, 'downloaded');
             successful++;
+            console.log(`✅ Video ${videoIndex} completed successfully`);
           } else {
-            if (skipLowQuality) {
-              skipped++;
-            } else {
-              failed++;
-            }
+            this.markVideoDownloaded(url, videoIndex, filteredUrls[i], filename, 'skipped');
+            skipped++;
+            console.log(`⏭️  Video ${videoIndex} skipped (no HD quality)`);
           }
         } catch (error) {
           console.error(`❌ Error with video ${videoIndex}: ${error.message}`);
+          this.markVideoDownloaded(url, videoIndex, filteredUrls[i], `error_${videoIndex}`, 'failed');
           failed++;
         }
 
-        // Delay between downloads to avoid rate limits
+        // Delay between downloads
         if (i < filteredUrls.length - 1) {
-          console.log(`⏳ Waiting ${delayBetweenDownloads/1000}s before next download...\n`);
-          await new Promise(resolve => setTimeout(resolve, delayBetweenDownloads));
+          console.log(`⏳ Waiting ${settings.delayBetweenDownloads/1000}s before next download...`);
+          await new Promise(resolve => setTimeout(resolve, settings.delayBetweenDownloads));
         }
+      }
+
+      // Check if playlist is completed
+      const totalProcessed = playlistProgress.downloadedVideos.length + playlistProgress.skippedVideos.length + playlistProgress.failedVideos.length;
+      if (totalProcessed >= videoUrls.length || (maxVideos && totalProcessed >= maxVideos)) {
+        this.markPlaylistCompleted(url);
       }
 
       return { successful, failed, skipped };
@@ -413,8 +561,7 @@ class YouTubeDownloader {
   async testConnection() {
     try {
       console.log('🧪 Testing connection...');
-      // Use a reliable test video
-      const testUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Rick Roll - always available
+      const testUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
       const info = await this.getVideoInfo(testUrl);
       console.log(`✅ Connection test passed: "${info.title}"`);
       return true;
@@ -428,10 +575,20 @@ class YouTubeDownloader {
 async function main() {
   const downloader = new YouTubeDownloader();
 
+  // Show current progress
+  downloader.printProgressSummary();
+
   // Initialize
   const initialized = await downloader.initialize();
   if (!initialized) {
     console.error('❌ Could not initialize downloader');
+    return;
+  }
+
+  // Load playlists configuration
+  const config = downloader.loadPlaylists();
+  if (!config) {
+    console.error('❌ Could not load playlists configuration');
     return;
   }
 
@@ -443,36 +600,25 @@ async function main() {
   }
 
   console.log('\n' + '='.repeat(60));
-  console.log('🎵 Starting HD playlist downloads (>720p only)');
+  console.log('🎵 Starting HD playlist downloads with resume capability');
   console.log('='.repeat(60) + '\n');
 
-  // Configure your playlists here
-  const playlists = [
-    {
-      name: 'NDTV India Playlist',
-      url: 'https://www.youtube.com/playlist?list=PLpSN4vP31-Ksd_JKfIN2bOZp4mw3jdyye',
-      maxVideos: 5, // Download first 5 videos as test
-      startIndex: 0
+  const enabledPlaylists = config.playlists.filter(p => p.enabled !== false);
+  console.log(`📋 Found ${enabledPlaylists.length} enabled playlists`);
+
+  let totalSuccessful = 0;
+  let totalSkipped = 0;
+  let totalFailed = 0;
+
+  for (const playlist of enabledPlaylists) {
+    const playlistProgress = downloader.getPlaylistProgress(playlist.url);
+    
+    if (playlistProgress.completed) {
+      console.log(`✅ Skipping completed playlist: ${playlist.name}`);
+      continue;
     }
-    // Add more playlists here:
-    // {
-    //   name: 'Another Playlist',
-    //   url: 'https://www.youtube.com/playlist?list=ANOTHER_ID',
-    //   maxVideos: 10
-    // }
-  ];
 
-  for (const playlist of playlists) {
-    console.log(`\n🎵 Processing: ${playlist.name}`);
-    console.log(`🔗 ${playlist.url}`);
-    console.log(`📺 Quality: HD only (>720p)\n`);
-
-    const result = await downloader.downloadPlaylist(playlist.url, {
-      maxVideos: playlist.maxVideos,
-      startIndex: playlist.startIndex || 0,
-      delayBetweenDownloads: 5000, // 5 second delay
-      skipLowQuality: true // Skip videos without HD quality
-    });
+    const result = await downloader.downloadPlaylist(playlist, config.settings);
 
     console.log(`\n📊 Results for "${playlist.name}":
 ✅ Successful HD downloads: ${result.successful}
@@ -480,62 +626,44 @@ async function main() {
 ❌ Failed: ${result.failed}
 `);
 
+    totalSuccessful += result.successful;
+    totalSkipped += result.skipped;
+    totalFailed += result.failed;
+
     // Wait between playlists
-    if (playlists.indexOf(playlist) < playlists.length - 1) {
-      console.log('⏸️  Waiting 30s before next playlist...\n');
-      await new Promise(resolve => setTimeout(resolve, 30000));
+    const currentIndex = enabledPlaylists.indexOf(playlist);
+    if (currentIndex < enabledPlaylists.length - 1) {
+      const nextPlaylist = enabledPlaylists[currentIndex + 1];
+      const nextProgress = downloader.getPlaylistProgress(nextPlaylist.url);
+      
+      if (!nextProgress.completed) {
+        console.log(`⏸️  Waiting ${config.settings.delayBetweenPlaylists/1000}s before next playlist...\n`);
+        await new Promise(resolve => setTimeout(resolve, config.settings.delayBetweenPlaylists));
+      }
     }
   }
 
-  console.log('\n🎉 All HD downloads completed!');
+  // Generate merge script if there are files to merge
+  downloader.generateFFmpegScript();
+
+  console.log('\n' + '='.repeat(60));
+  console.log('🎉 DOWNLOAD SESSION COMPLETED!');
+  console.log('='.repeat(60));
+  console.log(`✅ Total Successful: ${totalSuccessful}`);
+  console.log(`⏭️  Total Skipped: ${totalSkipped}`);
+  console.log(`❌ Total Failed: ${totalFailed}`);
+  console.log(`💾 Progress saved to: ${downloader.progressFile}`);
+  
+  // Show final progress summary
+  downloader.printProgressSummary();
 }
-
-// Alternative: Download specific video URLs (HD only)
-async function downloadSpecificVideos() {
-  const downloader = new YouTubeDownloader();
-  await downloader.initialize();
-
-  const videoUrls = [
-    'https://www.youtube.com/watch?v=dt2z-xxL6oM',
-    // Add more specific video URLs here
-  ];
-
-  console.log(`🎯 Downloading ${videoUrls.length} specific videos (HD only)\n`);
-
-  let successful = 0;
-  let skipped = 0;
-  let failed = 0;
-
-  for (let i = 0; i < videoUrls.length; i++) {
-    const paddedIndex = String(i + 1).padStart(3, '0');
-    const result = await downloader.downloadSingleVideo(videoUrls[i], `${paddedIndex}_manual_video`);
-    
-    if (result) {
-      successful++;
-    } else {
-      skipped++; // Assuming it was skipped due to no HD quality
-    }
-    
-    if (i < videoUrls.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-    }
-  }
-
-  console.log(`\n📊 Final Results:
-✅ Successful HD downloads: ${successful}
-⏭️  Skipped (no HD): ${skipped}
-❌ Failed: ${failed}
-`);
-}
-
-// Choose which function to run:
-main().catch(console.error);
-
-// Or run this instead to download specific videos:
-// downloadSpecificVideos().catch(console.error);
 
 // Handle interruption
 process.on('SIGINT', () => {
   console.log('\n⚡ Download interrupted by user');
+  console.log('💾 Progress has been saved, you can resume later');
   process.exit(0);
 });
+
+// Run the main function
+main().catch(console.error);

@@ -1,0 +1,213 @@
+{
+  "lastUpdated": "2025-09-01T07:24:17.305Z",
+  "totalQueries": 21,
+  "totalChannels": 11,
+  "totalPlaylists": 11,
+  "channels": {
+    "Aaj Tak": [
+      {
+        "name": "Aaj Tak",
+        "url": "https://www.youtube.com/channel/UCt4t-jeY85JegMlZ-E5UWtA",
+        "channelId": "UCt4t-jeY85JegMlZ-E5UWtA",
+        "searchQuery": "Aaj Tak",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCt4t-jeY85JegMlZ-E5UWtA/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "Zee News": [
+      {
+        "name": "Zee News",
+        "url": "https://www.youtube.com/channel/UCIvaYmXn910QMdemBG3v1pQ",
+        "channelId": "UCIvaYmXn910QMdemBG3v1pQ",
+        "searchQuery": "Zee News",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCIvaYmXn910QMdemBG3v1pQ/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "ABP News": [
+      {
+        "name": "ABP NEWS",
+        "url": "https://www.youtube.com/channel/UCRWFSbif-RFENbBrSiez1DA",
+        "channelId": "UCRWFSbif-RFENbBrSiez1DA",
+        "searchQuery": "ABP News",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCRWFSbif-RFENbBrSiez1DA/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "Republic Bharat": [
+      {
+        "name": "Republic Bharat",
+        "url": "https://www.youtube.com/channel/UC7wXt18f2iA3EDXeqAVuKng",
+        "channelId": "UC7wXt18f2iA3EDXeqAVuKng",
+        "searchQuery": "Republic Bharat",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UC7wXt18f2iA3EDXeqAVuKng/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "TV9 Bharatvarsh": [
+      {
+        "name": "TV9 Bharatvarsh",
+        "url": "https://www.youtube.com/channel/UCOutOIcn_oho8pyVN3Ng-Pg",
+        "channelId": "UCOutOIcn_oho8pyVN3Ng-Pg",
+        "searchQuery": "TV9 Bharatvarsh",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCOutOIcn_oho8pyVN3Ng-Pg/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "Times Now Navbharat": [
+      {
+        "name": "TIMES NOW Navbharat",
+        "url": "https://www.youtube.com/channel/UCMk9Tdc-d1BIcAFaSppiVkw",
+        "channelId": "UCMk9Tdc-d1BIcAFaSppiVkw",
+        "searchQuery": "Times Now Navbharat",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCMk9Tdc-d1BIcAFaSppiVkw/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "NDTV India": [
+      {
+        "name": "NDTV India",
+        "url": "https://www.youtube.com/channel/UC9CYT9gSNLevX5ey2_6CK0Q",
+        "channelId": "UC9CYT9gSNLevX5ey2_6CK0Q",
+        "searchQuery": "NDTV India",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UC9CYT9gSNLevX5ey2_6CK0Q/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "DD News": [
+      {
+        "name": "DD News",
+        "url": "https://www.youtube.com/channel/UCKwucPzHZ7zCUIf7If-Wo1g",
+        "channelId": "UCKwucPzHZ7zCUIf7If-Wo1g",
+        "searchQuery": "DD News",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UCKwucPzHZ7zCUIf7If-Wo1g/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      },
+      {
+        "name": "DD NEWS BIHAR",
+        "url": "https://www.youtube.com/channel/UC3mriGmcV5p7cgkuA88laDQ",
+        "channelId": "UC3mriGmcV5p7cgkuA88laDQ",
+        "searchQuery": "DD News",
+        "playlists": [
+          {
+            "title": "NA - Latest Videos",
+            "id": "latest_NA",
+            "url": "https://www.youtube.com/channel/UC3mriGmcV5p7cgkuA88laDQ/videos",
+            "videoCount": 50,
+            "channelName": "NA",
+            "isLatestVideos": true
+          }
+        ]
+      }
+    ],
+    "Hindi Food Podcast": [],
+    "Hindi Podcasts": [],
+    "Bingepods Indian Podcasts": [],
+    "Figuring Out With Raj Shamani": [],
+    "The Ranveer Show Hindi": [],
+    "ANI Podcast with Smita Prakash": [
+      {
+        "name": "ANI Podcast with Smita Prakash Clips",
+        "url": "https://www.youtube.com/channel/UCxSnwVRM4Ax5HTj3zNRl3zw",
+        "channelId": "UCxSnwVRM4Ax5HTj3zNRl3zw",
+        "searchQuery": "ANI Podcast with Smita Prakash",
+        "playlists": [
+          {
+            "title": "ANI Podcast with Smita Prakash Clips - Playlists",
+            "id": "UCxSnwVRM4Ax5HTj3zNRl3zw",
+            "url": "https://www.youtube.com/playlist?list=UCxSnwVRM4Ax5HTj3zNRl3zw",
+            "videoCount": 4,
+            "channelName": "NA"
+          }
+        ]
+      }
+    ],
+    "Gyan Adhyatmik Katha": [
+      {
+        "name": "Gyan Adhyatmik Katha",
+        "url": "https://www.youtube.com/channel/UC8chHHavg9xKH-AtHhrYswA",
+        "channelId": "UC8chHHavg9xKH-AtHhrYswA",
+        "searchQuery": "Gyan Adhyatmik Katha",
+        "playlists": [
+          {
+            "title": "Gyan Adhyatmik Katha - Playlists",
+            "id": "UC8chHHavg9xKH-AtHhrYswA",
+            "url": "https://www.youtube.com/playlist?list=UC8chHHavg9xKH-AtHhrYswA",
+            "videoCount": 3,
+            "channelName": "NA"
+          }
+        ]
+      }
+    ],
+    "Puliyabaazi Hindi Podcast": [],
+    "The Madhushala Podcast": [],
+    "Naatak Radio": [],
+    "हिन्दी प्रसारण": [],
+    "Stories From the Quran by Meera'n Malik": [],
+    "Hindi Story Basket": []
+  }
+}
