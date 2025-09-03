@@ -1,54 +1,92 @@
+require('dotenv').config();
 const fs = require('fs').promises;
 const fsSync = require('fs');
 const path = require('path');
-const { S3Client, PutObjectCommand, HeadBucketCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, HeadBucketCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const mime = require('mime-types');
+const crypto = require('crypto');
 
 class S3MediaUploader {
-    constructor(bucketName, sourceFolder, transferredFolder, awsRegion = 'us-east-1') {
+    constructor(bucketName, sourceFolder, transferredFolder, awsRegion = 'ap-south-1') {
         this.bucketName = bucketName;
         this.sourceFolder = path.resolve(sourceFolder);
         this.transferredFolder = path.resolve(transferredFolder);
-        this.logFile = path.resolve('upload_log.json');
+        this.progressFile = path.resolve('s3_upload_progress.json');
+        this.logFile = path.resolve('s3_uploader.log');
         
         // Supported media file extensions
         this.supportedExtensions = new Set([
-            '.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', // Video
-            '.mp3', '.wav', '.aac', '.flac', '.ogg', '.m4a', '.wma'  // Audio
+            '.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', '.m4v', // Video
+            '.mp3', '.wav', '.aac', '.flac', '.ogg', '.m4a', '.wma', '.opus'  // Audio
         ]);
         
-        // Initialize S3 client
-        this.s3Client = new S3Client({
-            region: awsRegion,
-            credentials: {
+        // Initialize S3 client with better credential handling
+        this.s3Client = this.createS3Client(awsRegion);
+        
+        // Progress tracking
+        this.progress = null;
+        this.sessionStats = {
+            uploaded: 0,
+            skipped: 0,
+            failed: 0,
+            totalSize: 0,
+            uploadedSize: 0
+        };
+    }
+    
+    createS3Client(region) {
+        const config = {
+            region: region,
+            forcePathStyle: false,
+            // Increase timeout for large uploads
+            requestHandler: {
+                requestTimeout: 300000, // 5 minutes
+                httpsAgent: {
+                    timeout: 300000
+                }
+            }
+        };
+
+        // Multiple credential strategies
+        if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+            config.credentials = {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-            }
-        });
-        
-        // Load upload log
-        this.uploadLog = null;
+            };
+            this.log('Using explicit AWS credentials from environment variables', 'info');
+        } else {
+            // Try to use default credential chain (AWS CLI, EC2 role, etc.)
+            this.log('No explicit credentials found. Using default AWS credential chain', 'info');
+        }
+
+        return new S3Client(config);
     }
     
     async init() {
         try {
+            // Load progress first
+            this.progress = await this.loadProgress();
+            
             // Test S3 connection
+            this.log('Testing S3 connection...', 'info');
             await this.s3Client.send(new HeadBucketCommand({ Bucket: this.bucketName }));
-            this.log(`Successfully connected to S3 bucket: ${this.bucketName}`, 'info');
+            this.log(`Successfully connected to S3 bucket: ${this.bucketName}`, 'success');
             
             // Create directories if they don't exist
             await this.ensureDirectoryExists(this.sourceFolder);
             await this.ensureDirectoryExists(this.transferredFolder);
             
-            // Load upload log
-            this.uploadLog = await this.loadUploadLog();
-            
             return true;
         } catch (error) {
-            if (error.name === 'CredentialsProviderError') {
-                this.log('AWS credentials not found. Please set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables.', 'error');
+            if (error.name === 'CredentialsProviderError' || error.message.includes('credential')) {
+                this.log('AWS credentials error. Please ensure credentials are properly configured:', 'error');
+                this.log('1. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables', 'error');
+                this.log('2. Or configure AWS CLI: aws configure', 'error');
+                this.log('3. Or use IAM roles if running on AWS', 'error');
             } else if (error.$metadata?.httpStatusCode === 404) {
-                this.log(`Bucket '${this.bucketName}' not found.`, 'error');
+                this.log(`Bucket '${this.bucketName}' not found or access denied.`, 'error');
+            } else if (error.name === 'NetworkingError') {
+                this.log('Network error. Check your internet connection.', 'error');
             } else {
                 this.log(`Error connecting to S3: ${error.message}`, 'error');
             }
@@ -67,25 +105,55 @@ class S3MediaUploader {
         }
     }
     
-    async loadUploadLog() {
+    async loadProgress() {
         try {
-            if (fsSync.existsSync(this.logFile)) {
-                const data = await fs.readFile(this.logFile, 'utf8');
-                return JSON.parse(data);
+            if (fsSync.existsSync(this.progressFile)) {
+                const data = await fs.readFile(this.progressFile, 'utf8');
+                const progress = JSON.parse(data);
+                this.log(`Loaded progress: ${Object.keys(progress.uploadedFiles || {}).length} files previously uploaded`, 'info');
+                return progress;
             } else {
-                return { uploadedFiles: {} };
+                return {
+                    uploadedFiles: {},
+                    session: {
+                        startTime: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        totalFiles: 0,
+                        completedFiles: 0
+                    }
+                };
             }
         } catch (error) {
-            this.log('Upload log file is corrupted. Creating new log.', 'warning');
-            return { uploadedFiles: {} };
+            this.log('Progress file is corrupted. Creating new progress tracking.', 'warning');
+            return {
+                uploadedFiles: {},
+                session: {
+                    startTime: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    totalFiles: 0,
+                    completedFiles: 0
+                }
+            };
         }
     }
     
-    async saveUploadLog() {
+    async saveProgress() {
         try {
-            await fs.writeFile(this.logFile, JSON.stringify(this.uploadLog, null, 2), 'utf8');
+            this.progress.session.lastUpdated = new Date().toISOString();
+            await fs.writeFile(this.progressFile, JSON.stringify(this.progress, null, 2), 'utf8');
         } catch (error) {
-            this.log(`Error saving upload log: ${error.message}`, 'error');
+            this.log(`Error saving progress: ${error.message}`, 'error');
+        }
+    }
+    
+    generateFileHash(filePath) {
+        try {
+            const fileBuffer = fsSync.readFileSync(filePath);
+            const hash = crypto.createHash('md5').update(fileBuffer).digest('hex');
+            return hash;
+        } catch (error) {
+            this.log(`Error generating hash for ${filePath}: ${error.message}`, 'warning');
+            return null;
         }
     }
     
@@ -94,8 +162,20 @@ class S3MediaUploader {
         return this.supportedExtensions.has(ext);
     }
     
-    isAlreadyUploaded(filename) {
-        return filename in this.uploadLog.uploadedFiles;
+    isAlreadyUploaded(filename, filePath = null) {
+        const uploadRecord = this.progress.uploadedFiles[filename];
+        if (!uploadRecord) return false;
+        
+        // Additional verification with file hash if path provided
+        if (filePath && uploadRecord.fileHash) {
+            const currentHash = this.generateFileHash(filePath);
+            if (currentHash && currentHash !== uploadRecord.fileHash) {
+                this.log(`File ${filename} has changed (different hash). Will re-upload.`, 'warning');
+                return false;
+            }
+        }
+        
+        return uploadRecord.status === 'completed';
     }
     
     async getMediaFiles() {
@@ -111,10 +191,14 @@ class S3MediaUploader {
                     mediaFiles.push({
                         name: file,
                         path: filePath,
-                        size: stats.size
+                        size: stats.size,
+                        hash: this.generateFileHash(filePath)
                     });
                 }
             }
+            
+            // Sort by name for consistent processing order
+            mediaFiles.sort((a, b) => a.name.localeCompare(b.name));
             
             return mediaFiles;
         } catch (error) {
@@ -123,7 +207,18 @@ class S3MediaUploader {
         }
     }
     
-    async uploadToS3(filePath, s3Key) {
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    async uploadToS3(filePath, s3Key, fileSize) {
+        const startTime = Date.now();
+        let uploadStream = null;
+        
         try {
             const fileBuffer = await fs.readFile(filePath);
             const contentType = mime.lookup(filePath) || 'application/octet-stream';
@@ -132,18 +227,33 @@ class S3MediaUploader {
                 Bucket: this.bucketName,
                 Key: s3Key,
                 Body: fileBuffer,
-                ContentType: contentType
+                ContentType: contentType,
+                Metadata: {
+                    'original-filename': path.basename(filePath),
+                    'upload-timestamp': new Date().toISOString()
+                }
             });
             
-            const fileSize = (fileBuffer.length / (1024 * 1024)).toFixed(2);
-            this.log(`Uploading ${path.basename(filePath)} (${fileSize} MB)...`, 'info');
+            this.log(`Uploading ${path.basename(filePath)} (${this.formatFileSize(fileSize)})...`, 'info');
             
-            await this.s3Client.send(command);
-            this.log(`Successfully uploaded ${path.basename(filePath)} to S3`, 'success');
+            const response = await this.s3Client.send(command);
+            const uploadTime = ((Date.now() - startTime) / 1000).toFixed(2);
+            const uploadSpeed = (fileSize / (1024 * 1024) / (uploadTime / 1)).toFixed(2);
+            
+            this.log(`Successfully uploaded ${path.basename(filePath)} in ${uploadTime}s (${uploadSpeed} MB/s)`, 'success');
             return true;
             
         } catch (error) {
-            this.log(`Failed to upload ${path.basename(filePath)}: ${error.message}`, 'error');
+            const uploadTime = ((Date.now() - startTime) / 1000).toFixed(2);
+            this.log(`Failed to upload ${path.basename(filePath)} after ${uploadTime}s: ${error.message}`, 'error');
+            
+            // Log specific error types
+            if (error.name === 'NetworkingError') {
+                this.log('Network error occurred. Check your internet connection.', 'warning');
+            } else if (error.$metadata?.httpStatusCode === 403) {
+                this.log('Permission denied. Check your AWS credentials and bucket permissions.', 'warning');
+            }
+            
             return false;
         }
     }
@@ -153,14 +263,12 @@ class S3MediaUploader {
             const filename = path.basename(filePath);
             let destination = path.join(this.transferredFolder, filename);
             
-            // Handle filename conflicts
-            let counter = 1;
-            const originalDestination = destination;
-            while (fsSync.existsSync(destination)) {
+            // Handle filename conflicts by adding timestamp
+            if (fsSync.existsSync(destination)) {
                 const ext = path.extname(filename);
                 const name = path.basename(filename, ext);
-                destination = path.join(this.transferredFolder, `${name}_${counter}${ext}`);
-                counter++;
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
+                destination = path.join(this.transferredFolder, `${name}_${timestamp}${ext}`);
             }
             
             await fs.rename(filePath, destination);
@@ -173,13 +281,32 @@ class S3MediaUploader {
         }
     }
     
-    logUpload(filename, s3Key, fileSize) {
-        this.uploadLog.uploadedFiles[filename] = {
+    logUpload(filename, s3Key, fileSize, fileHash) {
+        this.progress.uploadedFiles[filename] = {
             s3Key: s3Key,
             uploadDate: new Date().toISOString(),
             fileSizeBytes: fileSize,
-            status: 'completed'
+            fileHash: fileHash,
+            status: 'completed',
+            bucket: this.bucketName
         };
+        
+        this.progress.session.completedFiles++;
+    }
+    
+    printProgressSummary() {
+        const uploaded = Object.keys(this.progress.uploadedFiles || {}).length;
+        const lastUpdate = this.progress.session?.lastUpdated || 'Never';
+        
+        console.log('\n' + '='.repeat(70));
+        console.log('📊 S3 UPLOAD PROGRESS SUMMARY');
+        console.log('='.repeat(70));
+        console.log(`📅 Last Updated: ${new Date(lastUpdate).toLocaleString()}`);
+        console.log(`🎯 Total Files Uploaded: ${uploaded}`);
+        console.log(`📦 S3 Bucket: ${this.bucketName}`);
+        console.log(`📁 Source Folder: ${this.sourceFolder}`);
+        console.log(`📁 Transferred Folder: ${this.transferredFolder}`);
+        console.log('='.repeat(70) + '\n');
     }
     
     async processFiles() {
@@ -190,74 +317,121 @@ class S3MediaUploader {
             return;
         }
         
-        this.log(`Found ${mediaFiles.length} media files to process`, 'info');
+        // Update session info
+        this.progress.session.totalFiles = mediaFiles.length;
+        this.progress.session.startTime = new Date().toISOString();
         
-        let uploadedCount = 0;
-        let skippedCount = 0;
-        let failedCount = 0;
+        // Calculate total size and filter unprocessed files
+        const unprocessedFiles = mediaFiles.filter(file => !this.isAlreadyUploaded(file.name, file.path));
+        const totalSize = mediaFiles.reduce((sum, file) => sum + file.size, 0);
+        const remainingSize = unprocessedFiles.reduce((sum, file) => sum + file.size, 0);
         
-        for (const file of mediaFiles) {
-            // Skip if already uploaded
-            if (this.isAlreadyUploaded(file.name)) {
-                this.log(`Skipping ${file.name} - already uploaded`, 'info');
-                skippedCount++;
-                continue;
-            }
-            
-            // Upload to S3
-            const s3Key = `media/${file.name}`; // Customize S3 key structure as needed
-            if (await this.uploadToS3(file.path, s3Key)) {
-                // Log the upload
-                this.logUpload(file.name, s3Key, file.size);
-                
-                // Move to transferred folder
-                if (await this.moveToTransferred(file.path)) {
-                    uploadedCount++;
-                    this.log(`Successfully processed ${file.name}`, 'success');
-                } else {
-                    failedCount++;
-                }
-                
-                // Save log after each successful upload
-                await this.saveUploadLog();
-            } else {
-                failedCount++;
-            }
-        }
+        this.log(`Found ${mediaFiles.length} media files (${this.formatFileSize(totalSize)} total)`, 'info');
+        this.log(`${unprocessedFiles.length} files remaining to upload (${this.formatFileSize(remainingSize)})`, 'info');
         
-        // Print summary
-        this.log(`
-Upload Summary:
-- Uploaded: ${uploadedCount} files
-- Skipped (already uploaded): ${skippedCount} files
-- Failed: ${failedCount} files
-- Total processed: ${mediaFiles.length} files
-        `, 'info');
-    }
-    
-    showUploadHistory() {
-        const uploadedFiles = this.uploadLog.uploadedFiles || {};
-        
-        if (Object.keys(uploadedFiles).length === 0) {
-            console.log('No files have been uploaded yet.');
+        if (unprocessedFiles.length === 0) {
+            this.log('All files have already been uploaded!', 'success');
             return;
         }
         
-        console.log(`\nUpload History (${Object.keys(uploadedFiles).length} files):`);
+        // Process each file
+        for (let i = 0; i < unprocessedFiles.length; i++) {
+            const file = unprocessedFiles[i];
+            
+            try {
+                this.log(`\n[${i + 1}/${unprocessedFiles.length}] Processing: ${file.name}`, 'info');
+                
+                // Skip if already uploaded (double-check)
+                if (this.isAlreadyUploaded(file.name, file.path)) {
+                    this.log(`Skipping ${file.name} - already uploaded`, 'info');
+                    this.sessionStats.skipped++;
+                    continue;
+                }
+                
+                // Upload to S3
+                const s3Key = `media/${file.name}`; // Customize S3 key structure as needed
+                
+                if (await this.uploadToS3(file.path, s3Key, file.size)) {
+                    // Log the upload
+                    this.logUpload(file.name, s3Key, file.size, file.hash);
+                    
+                    // Move to transferred folder
+                    if (await this.moveToTransferred(file.path)) {
+                        this.sessionStats.uploaded++;
+                        this.sessionStats.uploadedSize += file.size;
+                        this.log(`✅ Successfully processed ${file.name}`, 'success');
+                    } else {
+                        this.log(`⚠️ Uploaded but failed to move ${file.name}`, 'warning');
+                        this.sessionStats.failed++;
+                    }
+                    
+                    // Save progress after each successful upload
+                    await this.saveProgress();
+                } else {
+                    this.sessionStats.failed++;
+                    this.log(`❌ Failed to upload ${file.name}`, 'error');
+                }
+                
+                // Show progress
+                const completed = i + 1;
+                const progressPercent = ((completed / unprocessedFiles.length) * 100).toFixed(1);
+                this.log(`Progress: ${completed}/${unprocessedFiles.length} (${progressPercent}%)`, 'info');
+                
+            } catch (error) {
+                this.log(`Error processing ${file.name}: ${error.message}`, 'error');
+                this.sessionStats.failed++;
+            }
+        }
+        
+        // Final summary
+        await this.saveProgress();
+        this.printSessionSummary();
+    }
+    
+    printSessionSummary() {
+        const { uploaded, skipped, failed, uploadedSize } = this.sessionStats;
+        const total = uploaded + skipped + failed;
+        
+        console.log('\n' + '='.repeat(70));
+        console.log('🎉 SESSION COMPLETE');
+        console.log('='.repeat(70));
+        console.log(`✅ Uploaded: ${uploaded} files (${this.formatFileSize(uploadedSize)})`);
+        console.log(`⏭️ Skipped: ${skipped} files (already uploaded)`);
+        console.log(`❌ Failed: ${failed} files`);
+        console.log(`📊 Total processed: ${total} files`);
+        console.log(`🗃️ Total files in progress: ${Object.keys(this.progress.uploadedFiles).length}`);
+        console.log('='.repeat(70));
+    }
+    
+    showUploadHistory() {
+        const uploadedFiles = this.progress.uploadedFiles || {};
+        
+        if (Object.keys(uploadedFiles).length === 0) {
+            console.log('\n📝 No upload history found.');
+            return;
+        }
+        
+        console.log(`\n📋 Upload History (${Object.keys(uploadedFiles).length} files):`);
         console.log('-'.repeat(80));
         
+        // Group by date
+        const filesByDate = {};
         for (const [filename, details] of Object.entries(uploadedFiles)) {
-            const uploadDate = details.uploadDate || 'Unknown';
-            const fileSize = details.fileSizeBytes || 0;
-            const s3Key = details.s3Key || 'Unknown';
-            
-            console.log(`File: ${filename}`);
-            console.log(`  S3 Key: ${s3Key}`);
-            console.log(`  Upload Date: ${uploadDate}`);
-            console.log(`  Size: ${(fileSize / (1024 * 1024)).toFixed(2)} MB`);
-            console.log(`  Status: ${details.status || 'Unknown'}`);
-            console.log();
+            const uploadDate = details.uploadDate ? details.uploadDate.split('T')[0] : 'Unknown';
+            if (!filesByDate[uploadDate]) filesByDate[uploadDate] = [];
+            filesByDate[uploadDate].push({ filename, ...details });
         }
+        
+        // Display grouped by date
+        for (const [date, files] of Object.entries(filesByDate)) {
+            console.log(`\n📅 ${date} (${files.length} files):`);
+            files.forEach(file => {
+                const size = this.formatFileSize(file.fileSizeBytes || 0);
+                const time = file.uploadDate ? new Date(file.uploadDate).toLocaleTimeString() : 'Unknown';
+                console.log(`  ✅ ${file.filename} (${size}) - ${time}`);
+            });
+        }
+        console.log('-'.repeat(80));
     }
     
     log(message, level = 'info') {
@@ -275,19 +449,30 @@ Upload Summary:
         
         // Also write to log file
         const logEntry = `[${timestamp}] ${level.toUpperCase()}: ${message}\n`;
-        fsSync.appendFileSync('s3_uploader.log', logEntry);
+        try {
+            fsSync.appendFileSync(this.logFile, logEntry);
+        } catch (error) {
+            // Ignore log file write errors
+        }
     }
 }
 
 async function main() {
     // Configuration - Update these values or set as environment variables
     const BUCKET_NAME = process.env.S3_BUCKET_NAME || 'your-s3-bucket-name';
-    const SOURCE_FOLDER = process.env.SOURCE_FOLDER || './media_source';
-    const TRANSFERRED_FOLDER = process.env.TRANSFERRED_FOLDER || './transferred';
+    const SOURCE_FOLDER = process.env.SOURCE_FOLDER || './merged';
+    const TRANSFERRED_FOLDER = process.env.TRANSFERRED_FOLDER || './uploaded_to_s3';
     const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
     
+    // Validate configuration
+    if (BUCKET_NAME === 'your-s3-bucket-name') {
+        console.error('❌ Please set S3_BUCKET_NAME environment variable or update the script');
+        console.error('Example: export S3_BUCKET_NAME=my-media-bucket');
+        process.exit(1);
+    }
+    
     // Print configuration (without sensitive data)
-    console.log('Configuration:');
+    console.log('🔧 Configuration:');
     console.log(`  S3 Bucket: ${BUCKET_NAME}`);
     console.log(`  Source Folder: ${SOURCE_FOLDER}`);
     console.log(`  Transferred Folder: ${TRANSFERRED_FOLDER}`);
@@ -308,21 +493,33 @@ async function main() {
         // Initialize the uploader
         await uploader.init();
         
-        // Show current upload history
+        // Show current progress and history
+        uploader.printProgressSummary();
         uploader.showUploadHistory();
         
         // Process files
         await uploader.processFiles();
         
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`\n❌ Error: ${error.message}`);
+        if (error.stack) {
+            console.error('Stack trace:', error.stack);
+        }
         process.exit(1);
     }
 }
 
+// Handle interruption gracefully
+process.on('SIGINT', async () => {
+    console.log('\n⚡ Upload interrupted by user');
+    console.log('💾 Progress has been saved automatically');
+    console.log('🔄 You can resume by running the script again');
+    process.exit(0);
+});
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    console.error('\n💥 Unhandled Rejection at:', promise, 'reason:', reason);
     process.exit(1);
 });
 

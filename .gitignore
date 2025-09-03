@@ -1,3 +1,10 @@
 downloads
 merged
 node_modules
+transferred
+.env
+download_progress.json
+s3_upload_progress.json
+*.json
+*.log
+download_progress.json

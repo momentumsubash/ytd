@@ -5,7 +5,7 @@ const { S3Client, PutObjectCommand, HeadBucketCommand } = require('@aws-sdk/clie
 const mime = require('mime-types');
 
 class S3MediaUploader {
-    constructor(bucketName, sourceFolder, transferredFolder, awsRegion = 'us-east-1') {
+    constructor(bucketName, sourceFolder, transferredFolder, awsRegion = 'ap-south-1') {
         this.bucketName = bucketName;
         this.sourceFolder = path.resolve(sourceFolder);
         this.transferredFolder = path.resolve(transferredFolder);

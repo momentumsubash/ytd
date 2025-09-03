@@ -3854,8 +3854,774 @@
       "totalVideos": 549,
       "startedAt": "2025-09-02T04:31:26.449Z",
       "completedAt": "2025-09-03T03:09:23.396Z"
+    },
+    "https://www.youtube.com/watch?list=PLKD9IRjNEpXtIYWrrqGYlraRQdmqv8wou": {
+      "completed": true,
+      "lastVideoIndex": 12,
+      "downloadedVideos": [
+        {
+          "index": 1,
+          "url": "https://www.youtube.com/watch?v=5KEBHFZiS1s",
+          "filename": "001_Kavi Yudh_   -        _ _ Hindu _ Muslim _ Sikh",
+          "timestamp": "2025-09-03T04:45:24.772Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 2,
+          "url": "https://www.youtube.com/watch?v=HIU33g4cAjY",
+          "filename": "002_Kavi Yudh_ _     .._       __ _ Hindu _ Muslim _ Sikh",
+          "timestamp": "2025-09-03T04:46:34.888Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 3,
+          "url": "https://www.youtube.com/watch?v=Hl6zOTOXjlY",
+          "filename": "003_Kavi Yudh_ _    .._       __ Bihar Election _ PM Modi _ Nitish",
+          "timestamp": "2025-09-03T04:47:30.387Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 4,
+          "url": "https://www.youtube.com/watch?v=k85h4FWIVxw",
+          "filename": "004_Kavi Yudh_ _    __       _ Chardham Zee News",
+          "timestamp": "2025-09-03T04:48:20.076Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 5,
+          "url": "https://www.youtube.com/watch?v=ETBag8bxTZ8",
+          "filename": "005_Kavi Yudh_ _     .._        _ _ Kavi Vinod Pandey",
+          "timestamp": "2025-09-03T04:49:08.816Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 6,
+          "url": "https://www.youtube.com/watch?v=--QZdsoy32o",
+          "filename": "006_Kavi Yudh_   ..       -    _ _ Kavi Neerr Gorakhhpuri",
+          "timestamp": "2025-09-03T04:49:55.513Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 7,
+          "url": "https://www.youtube.com/watch?v=unFe03y-CzI",
+          "filename": "007_Kavi Yudh_     ..      Pakistan Zee Independence Day 2025",
+          "timestamp": "2025-09-03T04:50:48.033Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 8,
+          "url": "https://www.youtube.com/watch?v=yX8Grg2bDyA",
+          "filename": "008_Kavi Yudh_ _          _ Pakistan Zee Independence Day 2025",
+          "timestamp": "2025-09-03T04:52:09.422Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 9,
+          "url": "https://www.youtube.com/watch?v=LqqeEwSyhYU",
+          "filename": "009_Kavi Yudh_          _ Pakistan Zee Independence Day 2025",
+          "timestamp": "2025-09-03T04:53:54.332Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 10,
+          "url": "https://www.youtube.com/watch?v=TQA4U7e1z38",
+          "filename": "010_Kavi Yudh_     ___      _ Pakistan Zee Independence Day 2025",
+          "timestamp": "2025-09-03T04:54:43.264Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 11,
+          "url": "https://www.youtube.com/watch?v=7ras19EG3ag",
+          "filename": "011_Kavi Yudh_   _    Independence Day 2025",
+          "timestamp": "2025-09-03T04:55:35.546Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 12,
+          "url": "https://www.youtube.com/watch?v=PR0YL8L8R-o",
+          "filename": "012_Kavi Yudh_              Independence Day 2025",
+          "timestamp": "2025-09-03T04:56:28.052Z",
+          "status": "downloaded"
+        }
+      ],
+      "skippedVideos": [],
+      "failedVideos": [],
+      "totalVideos": 12,
+      "startedAt": "2025-09-03T04:44:36.208Z",
+      "completedAt": "2025-09-03T04:56:28.053Z"
+    },
+    "https://www.youtube.com/watch?list=PLKD9IRjNEpXvAreOXwf6U6dB16uG6tBuV": {
+      "completed": true,
+      "lastVideoIndex": 73,
+      "downloadedVideos": [
+        {
+          "index": 1,
+          "url": "https://www.youtube.com/watch?v=pxT9gpIyH3E",
+          "filename": "001_Tharali Cloudburst Video_        _ _ Uttarkaashi _ Heavy Rain",
+          "timestamp": "2025-09-03T04:57:41.021Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 2,
+          "url": "https://www.youtube.com/watch?v=QIbx4hVggzs",
+          "filename": "002_Tharali Cloudburst Update_   - _  _ _ Chamoli _ Breaking News _ Latest",
+          "timestamp": "2025-09-03T04:58:20.178Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 3,
+          "url": "https://www.youtube.com/watch?v=QIbx4hVggzs",
+          "filename": "003_Tharali Cloudburst Update_   - _  _ _ Chamoli _ Breaking News _ Latest",
+          "timestamp": "2025-09-03T04:58:58.267Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 4,
+          "url": "https://www.youtube.com/watch?v=82ya5OHhOb4",
+          "filename": "004_Karnataka News_   DK    RSS  _    _ _ BJP",
+          "timestamp": "2025-09-03T04:59:35.661Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 5,
+          "url": "https://www.youtube.com/watch?v=7M74PQOC5us",
+          "filename": "005_Cloudburst in Chamoli_     _   _  _ Tharali _ Breaking News",
+          "timestamp": "2025-09-03T05:00:11.778Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 6,
+          "url": "https://www.youtube.com/watch?v=9lJ7j4R-DEk",
+          "filename": "006_Dharali Rescue Operation_  ..        _ _ Uttarkashi News",
+          "timestamp": "2025-09-03T05:00:55.822Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 7,
+          "url": "https://www.youtube.com/watch?v=hGi5OXKA5PQ",
+          "filename": "007_Dharali Cloudburst_      ZEE NEWSZ _ _ Uttarkashi _ Uttarakhand _ Weather",
+          "timestamp": "2025-09-03T05:01:55.349Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 8,
+          "url": "https://www.youtube.com/watch?v=W5tmDqBiDSs",
+          "filename": "008_Uttarkashi Cloud Burst Update_  ...DM    _ _ Dharali _ Uttarakhand News",
+          "timestamp": "2025-09-03T05:02:34.904Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 9,
+          "url": "https://www.youtube.com/watch?v=LyDRLGRSZOs",
+          "filename": "009_Uttarakhand Cloudburst_  ..    _  _ _ ST Hasan _ Uttarkashi",
+          "timestamp": "2025-09-03T05:03:56.442Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 10,
+          "url": "https://www.youtube.com/watch?v=fgjv9PuQZ8s",
+          "filename": "010_Dharali Cloud Burst_    EXCLUSIVE _       Zee News",
+          "timestamp": "2025-09-03T05:04:48.029Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 11,
+          "url": "https://www.youtube.com/watch?v=0_ub44YCo4o",
+          "filename": "011_Dharali Cloud Burst Update_ 98 ...  10  _ _ Untold Story _ Uttarkashi News",
+          "timestamp": "2025-09-03T05:05:52.437Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 12,
+          "url": "https://www.youtube.com/watch?v=TgSrDnEvCVk",
+          "filename": "012_ST Hasan Controversial Remark_       _    _ Dharali Cloud Burst",
+          "timestamp": "2025-09-03T05:06:59.992Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 13,
+          "url": "https://www.youtube.com/watch?v=KyBOD56-ElU",
+          "filename": "013_Dharlai Cloudburst Ground Report_ 95        _ Uttarkashi _ Uttarakhand",
+          "timestamp": "2025-09-03T05:08:10.594Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 14,
+          "url": "https://www.youtube.com/watch?v=bo845G_6_iA",
+          "filename": "014_ST Hasan On Dharali Cloudburst_     ..ST     _ _ Uttarkashi News",
+          "timestamp": "2025-09-03T05:09:11.877Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 15,
+          "url": "https://www.youtube.com/watch?v=2C6kcuvTIxc",
+          "filename": "015_Dharali Rescue Operation_  ..DGP   _ _ Uttarkashi _ Uttarakhand _ Breaking News",
+          "timestamp": "2025-09-03T05:10:16.283Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 16,
+          "url": "https://www.youtube.com/watch?v=Q_-HsRoIBOI",
+          "filename": "016_Dharali Cloudburst Rescue Operation_  ..  993    _ Uttarkashi News",
+          "timestamp": "2025-09-03T05:10:55.546Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 17,
+          "url": "https://www.youtube.com/watch?v=FYltqcEco7o",
+          "filename": "017_Kullu Landslide 2025_   _      _ _ Breaking News _ Hindi",
+          "timestamp": "2025-09-03T05:11:34.713Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 18,
+          "url": "https://www.youtube.com/watch?v=pLwARNlYfI4",
+          "filename": "018_Uttarkashi Cloud Burst_ _  _..     _",
+          "timestamp": "2025-09-03T05:13:47.280Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 19,
+          "url": "https://www.youtube.com/watch?v=snFqU2N0Xrg",
+          "filename": "019_Dharali Ground Report_         _ _ Uttarkashi _ Hindi News",
+          "timestamp": "2025-09-03T05:14:44.355Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 20,
+          "url": "https://www.youtube.com/watch?v=6Sl7GMaZfT4",
+          "filename": "020_Uttarkashi Cloudburst Update_  ..    _  _ _ Dharali _ Rescue",
+          "timestamp": "2025-09-03T05:16:41.150Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 21,
+          "url": "https://www.youtube.com/watch?v=kaD5YkAA9o0",
+          "filename": "021_Uttarakhand Cloudburst News_          _ _ Dharali _ Hindi News",
+          "timestamp": "2025-09-03T05:17:33.493Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 22,
+          "url": "https://www.youtube.com/watch?v=J8EBjEDzqaw",
+          "filename": "022_Uttarkashi Rescue Operation_   ..  ..     _ _ Breaking",
+          "timestamp": "2025-09-03T05:18:14.906Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 23,
+          "url": "https://www.youtube.com/watch?v=Yuff-zMLvWM",
+          "filename": "023_Uttarkashi Rescue Operation_      _ _ Dharali Cloudburst _ Breaking News",
+          "timestamp": "2025-09-03T05:19:03.426Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 24,
+          "url": "https://www.youtube.com/watch?v=UtOCEY63Ppw",
+          "filename": "024_Uttarkashi Rescue Operation_      _    _ _ Dharali Cloudburst",
+          "timestamp": "2025-09-03T05:20:23.284Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 25,
+          "url": "https://www.youtube.com/watch?v=UtOCEY63Ppw",
+          "filename": "025_Uttarkashi Rescue Operation_      _    _ _ Dharali Cloudburst",
+          "timestamp": "2025-09-03T05:21:07.548Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 26,
+          "url": "https://www.youtube.com/watch?v=5RSg9mjf6d0",
+          "filename": "026_Uttarkashi Rescue Operation_       _     LIVE _",
+          "timestamp": "2025-09-03T05:23:38.189Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 27,
+          "url": "https://www.youtube.com/watch?v=M7CDVeUWuA4",
+          "filename": "027_Uttarakhand Cloudburst Reason_         .._   _",
+          "timestamp": "2025-09-03T05:25:13.655Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 28,
+          "url": "https://www.youtube.com/watch?v=Uyku6HFQ418",
+          "filename": "028_CM Dhami on Uttarkashi Cloudburst_    CM     _ _ Breaking News",
+          "timestamp": "2025-09-03T05:26:13.176Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 29,
+          "url": "https://www.youtube.com/watch?v=Xklx4lQmAEc",
+          "filename": "029_Baat Pate Ki_        _ _ Uttarkashi Cloud Burst _ Uttrakhand",
+          "timestamp": "2025-09-03T05:27:42.061Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 30,
+          "url": "https://www.youtube.com/watch?v=k8hMDuWGSCE",
+          "filename": "030_Uttarakhand Cloud burst_ 30 ..       _ Uttarakashi Glacier Zee News",
+          "timestamp": "2025-09-03T05:28:31.646Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 31,
+          "url": "https://www.youtube.com/watch?v=D0kph5vsANo",
+          "filename": "031_Uttarkashi Cloudburst_    ..   .. _ _ Uttrakhand Breaking",
+          "timestamp": "2025-09-03T05:30:52.269Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 32,
+          "url": "https://www.youtube.com/watch?v=9vk3gZkP_O0",
+          "filename": "032_Uttarkashi Cloud Burst_      ...   _ _ Uttrakhand",
+          "timestamp": "2025-09-03T05:32:32.084Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 33,
+          "url": "https://www.youtube.com/watch?v=EiO_eklqmEE",
+          "filename": "033_Uttarakhand Cloud burst_  _       _  Uttarakashi Glacier",
+          "timestamp": "2025-09-03T05:34:03.940Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 34,
+          "url": "https://www.youtube.com/watch?v=lUDYu9mt_AM",
+          "filename": "034_Anantnag   _  _    _ _ Jammu Kashmir _ Shivling _ Hindi News",
+          "timestamp": "2025-09-03T05:34:41.212Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 35,
+          "url": "https://www.youtube.com/watch?v=q2V7q1Fgerc",
+          "filename": "035_Uttarkashi Breaking_       _  _ _ Uttrakhand Flood",
+          "timestamp": "2025-09-03T05:35:56.642Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 36,
+          "url": "https://www.youtube.com/watch?v=hCSgNeZTcw4",
+          "filename": "036_Speed News_  5     _ Uttarkashi Cloud Burst _ Uttrakhand Flood Latest News",
+          "timestamp": "2025-09-03T05:36:39.130Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 37,
+          "url": "https://www.youtube.com/watch?v=_MUbC9plFfM",
+          "filename": "037_Uttarkashi Cloud Burst_    .. _     _ _ Ground Report",
+          "timestamp": "2025-09-03T05:38:14.008Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 38,
+          "url": "https://www.youtube.com/watch?v=_MUbC9plFfM",
+          "filename": "038_Uttarkashi Cloud Burst_    .. _     _ _ Ground Report",
+          "timestamp": "2025-09-03T05:39:03.699Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 39,
+          "url": "https://www.youtube.com/watch?v=HB5nym9yUzM",
+          "filename": "039_Kinnaur Cloudburst_        _ _ Breaking News _ Flood 2025",
+          "timestamp": "2025-09-03T05:40:18.457Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 40,
+          "url": "https://www.youtube.com/watch?v=hiSIYCqAlzU",
+          "filename": "040_Uttarakhand Cloud burst_  35          Dharali village",
+          "timestamp": "2025-09-03T05:42:58.813Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 41,
+          "url": "https://www.youtube.com/watch?v=hiSIYCqAlzU",
+          "filename": "041_Uttarakhand Cloud burst_  35          Dharali village",
+          "timestamp": "2025-09-03T05:43:44.099Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 42,
+          "url": "https://www.youtube.com/watch?v=pRJYNgQuw0Y",
+          "filename": "042_Uttarkashi Flood_            _ _ Uttrakhand Alert",
+          "timestamp": "2025-09-03T05:44:36.986Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 43,
+          "url": "https://www.youtube.com/watch?v=pRJYNgQuw0Y",
+          "filename": "043_Uttarkashi Flood_            _ _ Uttrakhand Alert",
+          "timestamp": "2025-09-03T05:45:20.093Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 44,
+          "url": "https://www.youtube.com/watch?v=jQxFCg_16yw",
+          "filename": "044_Uttarkashi Flood_   ..     _ _ Uttrakhand Breaking _ CM Dhami",
+          "timestamp": "2025-09-03T05:46:06.033Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 45,
+          "url": "https://www.youtube.com/watch?v=jQxFCg_16yw",
+          "filename": "045_Uttarkashi Flood_   ..     _ _ Uttrakhand Breaking _ CM Dhami",
+          "timestamp": "2025-09-03T05:46:50.027Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 46,
+          "url": "https://www.youtube.com/watch?v=xzXa_tRtupE",
+          "filename": "046_Uttarakhand Cloudburst News_  _ 10   _ _ Breaking News _ Uttarkashi",
+          "timestamp": "2025-09-03T05:49:11.499Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 47,
+          "url": "https://www.youtube.com/watch?v=xzXa_tRtupE",
+          "filename": "047_Uttarakhand Cloudburst News_  _ 10   _ _ Breaking News _ Uttarkashi",
+          "timestamp": "2025-09-03T05:50:19.126Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 48,
+          "url": "https://www.youtube.com/watch?v=hDubEcgtMoM",
+          "filename": "048_Uttarakashi Cloudburst_    ..    _ _ Breaking News_Latest",
+          "timestamp": "2025-09-03T05:51:16.173Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 49,
+          "url": "https://www.youtube.com/watch?v=hDubEcgtMoM",
+          "filename": "049_Uttarakashi Cloudburst_    ..    _ _ Breaking News_Latest",
+          "timestamp": "2025-09-03T05:52:00.132Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 50,
+          "url": "https://www.youtube.com/watch?v=hDubEcgtMoM",
+          "filename": "050_Uttarakashi Cloudburst_    ..    _ _ Breaking News_Latest",
+          "timestamp": "2025-09-03T05:52:42.524Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 51,
+          "url": "https://www.youtube.com/watch?v=KaTYe0-tyKk",
+          "filename": "051_Dharali Cloudburst_    NDRF  DIG   _ _ Breaking News _ Uttarkashi Flood",
+          "timestamp": "2025-09-03T05:53:24.504Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 52,
+          "url": "https://www.youtube.com/watch?v=KaTYe0-tyKk",
+          "filename": "052_Dharali Cloudburst_    NDRF  DIG   _ _ Breaking News _ Uttarkashi Flood",
+          "timestamp": "2025-09-03T05:54:00.451Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 53,
+          "url": "https://www.youtube.com/watch?v=7jH-Tpk1lJo",
+          "filename": "053_ITBP on Dharali Cloudburst_   .. ITBP     - _ _ Breaking",
+          "timestamp": "2025-09-03T05:55:11.284Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 54,
+          "url": "https://www.youtube.com/watch?v=xGWn55xmL7c",
+          "filename": "054_Uttarakhand Cloudburst Death Toll_  ..    _ _ Breaking News _ Dharali",
+          "timestamp": "2025-09-03T05:56:05.484Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 55,
+          "url": "https://www.youtube.com/watch?v=TbrlpeUx5iU",
+          "filename": "055_Uttarakhand Cloudburst Live Updates_         _",
+          "timestamp": "2025-09-03T05:57:30.373Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 56,
+          "url": "https://www.youtube.com/watch?v=5d4ah0cGh9Y",
+          "filename": "056_Uttarakhand Cloudburst News_   _ ITBP     _     _",
+          "timestamp": "2025-09-03T05:58:53.661Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 57,
+          "url": "https://www.youtube.com/watch?v=Ts39vtoGPMo",
+          "filename": "057_Breaking News_        _ _ Uttrakahnd News _ Uttarkashi Cloudburst",
+          "timestamp": "2025-09-03T05:59:34.151Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 58,
+          "url": "https://www.youtube.com/watch?v=ol1OYJ-3cWc",
+          "filename": "058_Uttrakashi Clodbust Breaking News _   _ _ _  _  _",
+          "timestamp": "2025-09-03T06:00:47.633Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 59,
+          "url": "https://www.youtube.com/watch?v=D37Z6hewIXA",
+          "filename": "059_Uttarkashi Cloudburst Updates_   _ _ _  _  _",
+          "timestamp": "2025-09-03T06:01:49.430Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 60,
+          "url": "https://www.youtube.com/watch?v=Psmfqqh5Ynk",
+          "filename": "060_Breaking News _          _ _ Uttarkashi Cloudburst",
+          "timestamp": "2025-09-03T06:02:35.176Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 61,
+          "url": "https://www.youtube.com/watch?v=KrMjwoBTgMg",
+          "filename": "061_Uttarkashi Cloudburst Breaking News _          _",
+          "timestamp": "2025-09-03T06:03:34.289Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 62,
+          "url": "https://www.youtube.com/watch?v=Ey3rYwKw6D8",
+          "filename": "062_Uttarkashi Cloudburst_       10  _ _ Breaking News",
+          "timestamp": "2025-09-03T06:04:30.200Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 63,
+          "url": "https://www.youtube.com/watch?v=VROBXZBgmfg",
+          "filename": "063_Uttarkashi Cloudburst Breaking News _      _ Breaking News",
+          "timestamp": "2025-09-03T06:05:45.929Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 64,
+          "url": "https://www.youtube.com/watch?v=fWtspP_gThE",
+          "filename": "064_Uttrakashi Cloudbust _    _",
+          "timestamp": "2025-09-03T06:06:40.682Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 65,
+          "url": "https://www.youtube.com/watch?v=mnFlcAY_5Ss",
+          "filename": "065_Uttarkashi Cloudburst_        _ _ Breaking news _ ZEE News",
+          "timestamp": "2025-09-03T06:07:31.165Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 66,
+          "url": "https://www.youtube.com/watch?v=5GwCPUMzLxo",
+          "filename": "066_Uttarkashi Cloud Burst_     _    _ _ Breaking news",
+          "timestamp": "2025-09-03T06:08:28.278Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 67,
+          "url": "https://www.youtube.com/watch?v=8JN3LU39ICQ",
+          "filename": "067_Uttrakashi Cloudbust _       _",
+          "timestamp": "2025-09-03T06:09:22.280Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 68,
+          "url": "https://www.youtube.com/watch?v=ZANdOvxhJao",
+          "filename": "068_Uttarkashi Cloud Burst Breaking_    .. _     _",
+          "timestamp": "2025-09-03T06:10:17.260Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 69,
+          "url": "https://www.youtube.com/watch?v=cB3KhkfuYyo",
+          "filename": "069_Deshhit_ _ .._      _ _ Uttarkashi Cloud Burst _ Uttrakhand",
+          "timestamp": "2025-09-03T06:12:13.835Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 70,
+          "url": "https://www.youtube.com/watch?v=Rn9pJ5BTRkM",
+          "filename": "070_Deshhit_    ..30       _Uttrakhand Uttarkashi Cloud Burst",
+          "timestamp": "2025-09-03T06:12:56.513Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 71,
+          "url": "https://www.youtube.com/watch?v=Fnje0o_bmJE",
+          "filename": "071_Baat Pate Ki_      _     _ _ Breaking News",
+          "timestamp": "2025-09-03T06:14:44.673Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 72,
+          "url": "https://www.youtube.com/watch?v=8_oqDAVcGrI",
+          "filename": "072_Baat Pate Ki___ _ _  _   _ _ Uttarkashi Cloud Burst",
+          "timestamp": "2025-09-03T06:16:23.110Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 73,
+          "url": "https://www.youtube.com/watch?v=euRn-U_iNh4",
+          "filename": "073_Rajniti_ __   __   _ _ Uttarkashi Cloud Burst _ Uttrakhand Breaking",
+          "timestamp": "2025-09-03T06:18:21.607Z",
+          "status": "downloaded"
+        }
+      ],
+      "skippedVideos": [],
+      "failedVideos": [],
+      "totalVideos": 73,
+      "startedAt": "2025-09-03T04:56:28.053Z",
+      "completedAt": "2025-09-03T06:18:21.608Z"
+    },
+    "https://www.youtube.com/watch?list=PLKD9IRjNEpXu5YSgvzFLWz9AL5Ye5eooY": {
+      "completed": true,
+      "lastVideoIndex": 13,
+      "downloadedVideos": [
+        {
+          "index": 1,
+          "url": "https://www.youtube.com/watch?v=dVz02FpLM68",
+          "filename": "001_Trump Tariffs _    __   _ _ World news _ America _ Breaking news",
+          "timestamp": "2025-09-03T06:19:31.974Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 2,
+          "url": "https://www.youtube.com/watch?v=lmBSJQTFJOw",
+          "filename": "002_Trump Tarrifs_          _   _  PM Modi _ ISRO",
+          "timestamp": "2025-09-03T06:20:07.242Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 3,
+          "url": "https://www.youtube.com/watch?v=vgAtOfwrFF8",
+          "filename": "003_Trump Tarrifs_       _ _ PM Modi _ China _ India _ Xi Jinping _ Border",
+          "timestamp": "2025-09-03T06:20:44.042Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 4,
+          "url": "https://www.youtube.com/watch?v=049ViLvKNfg",
+          "filename": "004_Trump Tarrifs_         _ _ PM Modi _ 79th Independence Day _ Red Fort",
+          "timestamp": "2025-09-03T06:21:22.419Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 5,
+          "url": "https://www.youtube.com/watch?v=Uyqpi-cHoyo",
+          "filename": "005_India on Trump Tarrif_         ..  _ Owaisi on America",
+          "timestamp": "2025-09-03T06:22:03.746Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 6,
+          "url": "https://www.youtube.com/watch?v=Y-e5Ph6kUXE",
+          "filename": "006_Trump Tariff on India_ 50_    _     ___ Tariff War World News",
+          "timestamp": "2025-09-03T06:22:37.937Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 7,
+          "url": "https://www.youtube.com/watch?v=0AukMo-2UHY",
+          "filename": "007_Trump Tarrifs_           _ _ PM Modi _ America Vs India",
+          "timestamp": "2025-09-03T06:23:22.597Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 8,
+          "url": "https://www.youtube.com/watch?v=1oPZRUhdL7o",
+          "filename": "008_Trump Pakistan Connection_       _   _ _ Asim Munir",
+          "timestamp": "2025-09-03T06:24:08.197Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 9,
+          "url": "https://www.youtube.com/watch?v=shM7SdDP7C8",
+          "filename": "009_Trump Tarrifs_         _ _ MEA _ India _ Breaking News _ Hindi News",
+          "timestamp": "2025-09-03T06:24:47.745Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 10,
+          "url": "https://www.youtube.com/watch?v=_9wSXesSb40",
+          "filename": "010_Trump Threatens India Again_          _ _ Tarrif _ America _ Breaking",
+          "timestamp": "2025-09-03T06:25:49.459Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 11,
+          "url": "https://www.youtube.com/watch?v=zel4GSoRLz0",
+          "filename": "011_Trump Action on India_       _      _ Tarrif War _America",
+          "timestamp": "2025-09-03T06:26:27.131Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 12,
+          "url": "https://www.youtube.com/watch?v=lsxyWa7UmLY",
+          "filename": "012_Trump New Tariff on India_   50_ ..     _ _India _Modi _Breaking",
+          "timestamp": "2025-09-03T06:27:12.131Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 13,
+          "url": "https://www.youtube.com/watch?v=M8vwrje-22s",
+          "filename": "013_Trump New Tariff on India_       50  _   _",
+          "timestamp": "2025-09-03T06:28:20.207Z",
+          "status": "downloaded"
+        }
+      ],
+      "skippedVideos": [],
+      "failedVideos": [],
+      "totalVideos": 13,
+      "startedAt": "2025-09-03T06:18:21.609Z",
+      "completedAt": "2025-09-03T06:28:20.208Z"
+    },
+    "https://www.youtube.com/watch?list=PLKD9IRjNEpXvUDeIYn1OZxNmx_dTe4BSP": {
+      "completed": true,
+      "lastVideoIndex": 5,
+      "downloadedVideos": [
+        {
+          "index": 1,
+          "url": "https://www.youtube.com/watch?v=DhFGG6yHHyg",
+          "filename": "001_Zee Podcast_         _ _ Chhangur Conversion",
+          "timestamp": "2025-09-03T06:29:37.838Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 2,
+          "url": "https://www.youtube.com/watch?v=VZwIJ1QkaJ8",
+          "filename": "002_Zee Podcast_     _  _ _ Zee Religious Conversion _ Ashwini Upadhyay",
+          "timestamp": "2025-09-03T06:30:13.603Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 4,
+          "url": "https://www.youtube.com/watch?v=3dbzFvA4DUA",
+          "filename": "004_Zee Podcast __  5    _.._   _ _ _ UCC _ NRC  _Ashwini Upadhyay",
+          "timestamp": "2025-09-03T06:31:08.856Z",
+          "status": "downloaded"
+        },
+        {
+          "index": 5,
+          "url": "https://www.youtube.com/watch?v=4Qmq-Ad9DZQ",
+          "filename": "005_Zee Podcast Ep1 _ 200      _ UCC _ NRC _Hindu Rashtra_ SIR _Ashwini Upadhyay",
+          "timestamp": "2025-09-03T06:36:05.314Z",
+          "status": "downloaded"
+        }
+      ],
+      "skippedVideos": [
+        {
+          "index": 3,
+          "url": "https://www.youtube.com/watch?v=Z-9uhbpDOoI",
+          "filename": "003_video_1756881020588",
+          "timestamp": "2025-09-03T06:30:24.477Z",
+          "status": "skipped"
+        }
+      ],
+      "failedVideos": [],
+      "totalVideos": 5,
+      "startedAt": "2025-09-03T06:28:20.208Z",
+      "completedAt": "2025-09-03T06:36:05.315Z"
     }
   },
-  "lastUpdated": "2025-09-03T03:09:23.396Z",
-  "totalDownloaded": 533
+  "lastUpdated": "2025-09-03T06:36:05.315Z",
+  "totalDownloaded": 635
 }
