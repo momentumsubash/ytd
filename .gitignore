@@ -7,4 +7,4 @@ download_progress.json
 s3_upload_progress.json
 *.json
 *.log
-download_progress.json
+./download_progress.json
