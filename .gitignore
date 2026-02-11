@@ -9,3 +9,4 @@ s3_upload_progress.json
 *.log
 ./download_progress.json
 cookies.txt
+.repo-credentials
